@@ -1,11 +1,12 @@
 package net.acomputerdog.MCInject.transformations;
 
 import javassist.CtClass;
+import net.acomputerdog.MCInject.component.TargetType;
 
 /**
  * Represents a class transformation.
  */
-public abstract class AbsoluteTransformation {
+public abstract class AbstractTransformation {
 
     /**
      * Gets the class component that this transformation applies to.

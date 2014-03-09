@@ -1,4 +1,4 @@
-package net.acomputerdog.MCInject.transformations;
+package net.acomputerdog.MCInject.component;
 
 /**
  * Class element target types.
