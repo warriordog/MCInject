@@ -26,7 +26,9 @@ public abstract class AbstractInjector {
         if (transformations == null || transformations.size() == 0) {
             return false;
         }
-        //TODO implement
+        for (AbstractTransformation transformation : transformations) {
+            transformation.apply(cls);
+        }
         return true;
     }
 }
