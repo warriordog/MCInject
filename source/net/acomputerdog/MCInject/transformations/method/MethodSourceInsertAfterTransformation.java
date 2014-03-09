@@ -11,8 +11,8 @@ public class MethodSourceInsertAfterTransformation extends MethodTransformation 
     private final String desc;
     private final String code;
 
-    public MethodSourceInsertAfterTransformation(boolean constructor, String name, String desc, String code) {
-        super(constructor);
+    public MethodSourceInsertAfterTransformation(String name, String desc, String code) {
+        super(name.equalsIgnoreCase("<init>"));
         this.name = name;
         this.desc = desc;
         this.code = code;

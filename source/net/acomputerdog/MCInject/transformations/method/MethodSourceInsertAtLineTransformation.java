@@ -11,8 +11,8 @@ public class MethodSourceInsertAtLineTransformation extends MethodTransformation
     private final String code;
     private final int line;
 
-    public MethodSourceInsertAtLineTransformation(boolean constructor, String name, String desc, String code, int line) {
-        super(constructor);
+    public MethodSourceInsertAtLineTransformation(String name, String desc, String code, int line) {
+        super(name.equalsIgnoreCase("<init>"));
         this.name = name;
         this.desc = desc;
         this.code = code;

@@ -10,8 +10,8 @@ public class MethodSourceInsertBeforeTransformation extends MethodTransformation
     private final String desc;
     private final String code;
 
-    public MethodSourceInsertBeforeTransformation(boolean constructor, String name, String desc, String code) {
-        super(constructor);
+    public MethodSourceInsertBeforeTransformation(String name, String desc, String code) {
+        super(name.equalsIgnoreCase("<init>"));
         this.name = name;
         this.desc = desc;
         this.code = code;
