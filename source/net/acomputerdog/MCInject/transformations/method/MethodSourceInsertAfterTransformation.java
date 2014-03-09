@@ -1,9 +1,6 @@
 package net.acomputerdog.MCInject.transformations.method;
 
-import javassist.CannotCompileException;
-import javassist.CtClass;
-import javassist.CtMethod;
-import javassist.NotFoundException;
+import javassist.*;
 import net.acomputerdog.MCInject.component.TargetType;
 
 /**
@@ -14,7 +11,8 @@ public class MethodSourceInsertAfterTransformation extends MethodTransformation 
     private final String desc;
     private final String code;
 
-    public MethodSourceInsertAfterTransformation(String name, String desc, String code) {
+    public MethodSourceInsertAfterTransformation(boolean constructor, String name, String desc, String code) {
+        super(constructor);
         this.name = name;
         this.desc = desc;
         this.code = code;
@@ -29,8 +27,13 @@ public class MethodSourceInsertAfterTransformation extends MethodTransformation 
     @Override
     public boolean apply(CtClass cls) {
         try {
-            CtMethod m = cls.getMethod(getName(), getDesc());
-            m.insertAfter(getCode());
+            CtBehavior behavior;
+            if (isConstructor()) {
+                behavior = cls.getConstructor(getDesc());
+            } else {
+                behavior = cls.getMethod(getName(), getDesc());
+            }
+            behavior.insertAfter(getCode());
             return true;
         } catch (NotFoundException e) {
             return false;

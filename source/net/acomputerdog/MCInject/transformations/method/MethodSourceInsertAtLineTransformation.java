@@ -1,9 +1,6 @@
 package net.acomputerdog.MCInject.transformations.method;
 
-import javassist.CannotCompileException;
-import javassist.CtClass;
-import javassist.CtMethod;
-import javassist.NotFoundException;
+import javassist.*;
 
 /**
  * A transformation that inserts code at the specified line.
@@ -14,7 +11,8 @@ public class MethodSourceInsertAtLineTransformation extends MethodTransformation
     private final String code;
     private final int line;
 
-    public MethodSourceInsertAtLineTransformation(String name, String desc, String code, int line) {
+    public MethodSourceInsertAtLineTransformation(boolean constructor, String name, String desc, String code, int line) {
+        super(constructor);
         this.name = name;
         this.desc = desc;
         this.code = code;
@@ -30,9 +28,13 @@ public class MethodSourceInsertAtLineTransformation extends MethodTransformation
     @Override
     public boolean apply(CtClass cls) {
         try {
-            CtMethod m = cls.getMethod(getName(), getDesc());
-            m.insertAt(getLine(), getCode());
-            m.insertBefore(getCode());
+            CtBehavior behavior;
+            if (isConstructor()) {
+                behavior = cls.getConstructor(getDesc());
+            } else {
+                behavior = cls.getMethod(getName(), getDesc());
+            }
+            behavior.insertAt(getLine(), getCode());
             return true;
         } catch (NotFoundException e) {
             return false;

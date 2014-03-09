@@ -1,9 +1,6 @@
 package net.acomputerdog.MCInject.transformations.method;
 
-import javassist.CannotCompileException;
-import javassist.CtClass;
-import javassist.CtMethod;
-import javassist.NotFoundException;
+import javassist.*;
 
 /**
  * A transformation that inserts code at the beginning of a method
@@ -13,7 +10,8 @@ public class MethodSourceInsertBeforeTransformation extends MethodTransformation
     private final String desc;
     private final String code;
 
-    public MethodSourceInsertBeforeTransformation(String name, String desc, String code) {
+    public MethodSourceInsertBeforeTransformation(boolean constructor, String name, String desc, String code) {
+        super(constructor);
         this.name = name;
         this.desc = desc;
         this.code = code;
@@ -28,8 +26,13 @@ public class MethodSourceInsertBeforeTransformation extends MethodTransformation
     @Override
     public boolean apply(CtClass cls) {
         try {
-            CtMethod m = cls.getMethod(getName(), getDesc());
-            m.insertBefore(getCode());
+            CtBehavior behavior;
+            if (isConstructor()) {
+                behavior = cls.getConstructor(getDesc());
+            } else {
+                behavior = cls.getMethod(getName(), getDesc());
+            }
+            behavior.insertBefore(getCode());
             return true;
         } catch (NotFoundException e) {
             return false;
