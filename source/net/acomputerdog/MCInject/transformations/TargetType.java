@@ -3,9 +3,8 @@ package net.acomputerdog.MCInject.transformations;
 /**
  * Class element target types.
  */
-public enum TransformationTarget {
+public enum TargetType {
     METHOD,
     CONSTRUCTOR,
     FIELD,
-    CODE
 }
