@@ -1,13 +1,12 @@
 package net.acomputerdog.MCInject.transformations.method;
 
-import javassist.CtClass;
 import net.acomputerdog.MCInject.component.TargetType;
-import net.acomputerdog.MCInject.transformations.AbstractTransformation;
+import net.acomputerdog.MCInject.transformations.Transformation;
 
 /**
  * A transformation on a method.
  */
-public abstract class MethodTransformation extends AbstractTransformation {
+public abstract class MethodTransformation extends Transformation {
     private boolean isConstructor;
 
     protected MethodTransformation(boolean isConstructor) {
