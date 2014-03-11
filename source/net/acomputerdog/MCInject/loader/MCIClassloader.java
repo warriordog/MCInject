@@ -12,17 +12,17 @@ import java.util.List;
 /**
  * A simple ClassLoader that passes all loaded classes to it's injectors.
  */
-public class TransformerClassloader extends ClassLoader {
+public class MCIClassloader extends ClassLoader {
     private final List<Injector> injectors = new ArrayList<Injector>();
     private final URLClassPath ucp;
 
-    public TransformerClassloader(URL[] urls, List<Injector> injectors) {
+    public MCIClassloader(URL[] urls, List<Injector> injectors) {
         super();
         this.injectors.addAll(injectors);
         ucp = new URLClassPath(urls);
     }
 
-    public TransformerClassloader(ClassLoader parent, URL[] urls, List<Injector> injectors) {
+    public MCIClassloader(ClassLoader parent, URL[] urls, List<Injector> injectors) {
         super(parent);
         this.injectors.addAll(injectors);
         ucp = new URLClassPath(urls);
