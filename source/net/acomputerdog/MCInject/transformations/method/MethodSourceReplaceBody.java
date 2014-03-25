@@ -1,17 +1,15 @@
 package net.acomputerdog.MCInject.transformations.method;
 
-import javassist.*;
-import net.acomputerdog.MCInject.component.TargetType;
+import javassist.CannotCompileException;
+import javassist.CtClass;
+import javassist.NotFoundException;
 
-/**
- * A transformation that injects code to the end of a method.
- */
-public class MethodSourceInsertAfterTransformation extends MethodTransformation {
+public class MethodSourceReplaceBody extends MethodTransformation {
     private final String name;
     private final String desc;
     private final String code;
 
-    public MethodSourceInsertAfterTransformation(String name, String desc, String code) {
+    public MethodSourceReplaceBody(String name, String desc, String code) {
         super(name.equalsIgnoreCase("<init>"));
         this.name = name;
         this.desc = desc;
@@ -27,18 +25,12 @@ public class MethodSourceInsertAfterTransformation extends MethodTransformation 
     @Override
     public boolean apply(CtClass cls) {
         try {
-            CtBehavior behavior;
-            if (isConstructor()) {
-                behavior = cls.getConstructor(getDesc());
-            } else {
-                behavior = cls.getMethod(getName(), getDesc());
-            }
-            behavior.insertAfter(getCode());
+            getMethod(cls, getName(), getDesc()).setBody(getCode());
             return true;
         } catch (NotFoundException e) {
             return false;
         } catch (CannotCompileException e2) {
-            throw new RuntimeException("Illegal injection code!", e2);
+            throw new IllegalArgumentException("Illegal injection code!", e2);
         }
     }
 

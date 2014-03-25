@@ -1,5 +1,8 @@
 package net.acomputerdog.MCInject.transformations.method;
 
+import javassist.CtBehavior;
+import javassist.CtClass;
+import javassist.NotFoundException;
 import net.acomputerdog.MCInject.component.TargetType;
 import net.acomputerdog.MCInject.transformations.Transformation;
 
@@ -25,6 +28,14 @@ public abstract class MethodTransformation extends Transformation {
     @Override
     public final TargetType getTargetType() {
         return isConstructor ? TargetType.CONSTRUCTOR : TargetType.METHOD;
+    }
+
+    protected CtBehavior getMethod(CtClass cls, String name, String desc) throws NotFoundException {
+        if (isConstructor) {
+            return cls.getConstructor(desc);
+        } else {
+            return cls.getMethod(name, desc);
+        }
     }
 
 }

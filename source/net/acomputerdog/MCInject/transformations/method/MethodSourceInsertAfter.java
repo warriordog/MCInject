@@ -1,22 +1,22 @@
 package net.acomputerdog.MCInject.transformations.method;
 
-import javassist.*;
+import javassist.CannotCompileException;
+import javassist.CtClass;
+import javassist.NotFoundException;
 
 /**
- * A transformation that inserts code at the specified line.
+ * A transformation that injects code to the end of a method.
  */
-public class MethodSourceInsertAtLineTransformation extends MethodTransformation {
+public class MethodSourceInsertAfter extends MethodTransformation {
     private final String name;
     private final String desc;
     private final String code;
-    private final int line;
 
-    public MethodSourceInsertAtLineTransformation(String name, String desc, String code, int line) {
+    public MethodSourceInsertAfter(String name, String desc, String code) {
         super(name.equalsIgnoreCase("<init>"));
         this.name = name;
         this.desc = desc;
         this.code = code;
-        this.line = line;
     }
 
     /**
@@ -28,18 +28,12 @@ public class MethodSourceInsertAtLineTransformation extends MethodTransformation
     @Override
     public boolean apply(CtClass cls) {
         try {
-            CtBehavior behavior;
-            if (isConstructor()) {
-                behavior = cls.getConstructor(getDesc());
-            } else {
-                behavior = cls.getMethod(getName(), getDesc());
-            }
-            behavior.insertAt(getLine(), getCode());
+            getMethod(cls, getName(), getDesc()).insertAfter(getCode());
             return true;
         } catch (NotFoundException e) {
             return false;
         } catch (CannotCompileException e2) {
-            throw new RuntimeException("Illegal injection code!", e2);
+            throw new IllegalArgumentException("Illegal injection code!", e2);
         }
     }
 
@@ -53,9 +47,5 @@ public class MethodSourceInsertAtLineTransformation extends MethodTransformation
 
     protected String getCode() {
         return code;
-    }
-
-    protected int getLine() {
-        return line;
     }
 }
